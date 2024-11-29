@@ -52,7 +52,7 @@ public class ProjectSecurityConfig {
 
    /*
    * Introduce after spring security 6.3
-   * It will ensure you are using strong password. Introduce after spring security 6.3
+   * It will ensure you are using strong password.  Introduce after spring security 6.3
    */
   //@Bean //commenting as we need not to use for testing/development
   public CompromisedPasswordChecker compromisedPasswordChecker(){
