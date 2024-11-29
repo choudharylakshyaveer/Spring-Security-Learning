@@ -41,28 +41,6 @@ public class ProjectSecurityConfig {
 
   @Bean
   public UserDetailsService userDetailsService(DataSource dataSource) {
-    /*        UserDetails user = User.withUsername("user").password("{noop}123").authorities("read").build();
-    UserDetails admin = User.withUsername("admin").password("{noop}123").authorities("read").build();
-    UserDetails lvs_user = User.withUsername("lvs").password("{noop}123").authorities("read").build();*/
-/*
-    //Below is to use InMemoryUserDetailsManager
-    // For below UserDetails password is encoded from https://bcrypt-generator.com/
-    UserDetails user =
-        User.withUsername("user")
-            .password("{bcrypt}$2a$12$WovTznOR8QYHHScJ2Fsr6.eBV5IzEyE0WTod2DR7PsokGeX0lxdjK") //123
-            .authorities("read")
-            .build();
-    UserDetails admin =
-        User.withUsername("admin")
-            .password("{bcrypt}$2a$12$WovTznOR8QYHHScJ2Fsr6.eBV5IzEyE0WTod2DR7PsokGeX0lxdjK")
-            .authorities("read")
-            .build();
-    UserDetails lvs_user =
-        User.withUsername("lvs")
-            .password("{bcrypt}$2a$12$WovTznOR8QYHHScJ2Fsr6.eBV5IzEyE0WTod2DR7PsokGeX0lxdjK")
-            .authorities("read")
-            .build();
-    return new InMemoryUserDetailsManager(user, admin, lvs_user);*/
     //user : lvs password : 123
     return new JdbcUserDetailsManager(dataSource);
   }
@@ -74,9 +52,10 @@ public class ProjectSecurityConfig {
 
    /*
    * Introduce after spring security 6.3
+   * It will ensure you are using strong password. Introduce after spring security 6.3
    */
   //@Bean //commenting as we need not to use for testing/development
   public CompromisedPasswordChecker compromisedPasswordChecker(){
-    return new HaveIBeenPwnedRestApiPasswordChecker(); //It will ensure you are using strong password. Introduce after spring security 6.3
+    return new HaveIBeenPwnedRestApiPasswordChecker();
   }
 }
