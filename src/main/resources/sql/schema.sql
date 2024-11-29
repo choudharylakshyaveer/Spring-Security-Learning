@@ -14,11 +14,6 @@ create table if not exists authorities
     authority varchar(50) not null,
     constraint fk_authorities_users foreign key (username) references users (username)
 );
---create unique index ix_auth_username on authorities (username, authority);
---ALTER TABLE ix_auth_username DROP PRIMARY KEY (username, authority);
 
---DROP INDEX  ix_auth_username on authorities;
-
---create unique index ix_auth_username on authorities (username, authority);
 alter table authorities add unique INDEX (username, authority);
 COMMIT;
