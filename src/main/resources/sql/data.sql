@@ -20,4 +20,13 @@ values ('admin', 'admin');
 insert ignore into `authorities`
 values ('lvs', 'admin');
 
+
+INSERT INTO customer ( `email`, `password`, `role`) VALUES
+('happy@example.com', '{bcrypt}$2a$12$WovTznOR8QYHHScJ2Fsr6.eBV5IzEyE0WTod2DR7PsokGeX0lxdjK', 'admin'),
+( 'admin@example.com', '{bcrypt}$2a$12$WovTznOR8QYHHScJ2Fsr6.eBV5IzEyE0WTod2DR7PsokGeX0lxdjK', 'admin')
+;
+
+
+
+
 COMMIT;
