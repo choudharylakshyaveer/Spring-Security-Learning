@@ -1,9 +1,6 @@
 spring:
   config:
-    import: application_prod.yaml
-  profiles:
-    active:
-      - prod
+    activate-on-profiles: prod
   application:
     name: ${SPRING_APP_NAME:Spring Security Leaning}
   datasource:
@@ -22,7 +19,7 @@ spring:
   jpa:
     hibernate:
       ddl-auto: create-drop
-    show-sql: true
+    show-sql: false
 
 
     properties:
@@ -36,4 +33,4 @@ logging:
     console: ${LOGPATTERN_CONSOLE:%green(%d{HH:mm:ss.SSS}) %blue(%-5level) %red([%thread]) %yellow(%logger{15}) - %msg%n}
   level:
     spring:
-      security: ${SPRING_SECURITY_LOGGING_LEVEL:TRACE}
+      security: ${SPRING_SECURITY_LOGGING_LEVEL:ERROR}
