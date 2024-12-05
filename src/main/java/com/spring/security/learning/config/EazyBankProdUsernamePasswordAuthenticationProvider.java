@@ -12,10 +12,10 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
-@Profile("!prod")
+@Profile("prod")
 @Component
 @RequiredArgsConstructor
-public class EazyBankUsernamePasswordAuthenticationProvider implements AuthenticationProvider {
+public class EazyBankProdUsernamePasswordAuthenticationProvider implements AuthenticationProvider {
 
   private final UserDetailsService userDetailsService;
   private final PasswordEncoder passwordEncoder;
@@ -25,10 +25,12 @@ public class EazyBankUsernamePasswordAuthenticationProvider implements Authentic
     String username = authentication.getName();
     String password = authentication.getCredentials().toString();
     UserDetails userDetails = userDetailsService.loadUserByUsername(username);
-
+    if (passwordEncoder.matches(password, userDetails.getPassword())) {
       return new UsernamePasswordAuthenticationToken(
           userDetails, password, userDetails.getAuthorities());
-
+    } else {
+      throw new BadCredentialsException("Invalid password ");
+    }
   }
 
   @Override
