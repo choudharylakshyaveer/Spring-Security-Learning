@@ -18,13 +18,14 @@ public class ProjectSecurityConfig {
 
   @Bean
   SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
-    http.authorizeHttpRequests(
-        (requests) ->
-            requests
-                .requestMatchers("/myAccount", "/myLoans", "/myCards", "/myBalance")
-                .authenticated()
-                .requestMatchers("/contact", "/notices", "/error", "/register")
-                .permitAll());
+    http.requiresChannel(rcc -> rcc.anyRequest().requiresInsecure()) // only http
+        .authorizeHttpRequests(
+            (requests) ->
+                requests
+                    .requestMatchers("/myAccount", "/myLoans", "/myCards", "/myBalance")
+                    .authenticated()
+                    .requestMatchers("/contact", "/notices", "/error", "/register")
+                    .permitAll());
     http.formLogin(withDefaults());
     // http.formLogin(AbstractHttpConfigurer::disable)
     http.httpBasic(withDefaults());
