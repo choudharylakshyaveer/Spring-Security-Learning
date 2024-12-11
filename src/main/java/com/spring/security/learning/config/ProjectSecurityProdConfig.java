@@ -2,6 +2,7 @@ package com.spring.security.learning.config;
 
 import static org.springframework.security.config.Customizer.withDefaults;
 
+import com.spring.security.learning.exceptionhandling.CustomBasicAuthenticationEntryPoint;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
@@ -28,7 +29,10 @@ public class ProjectSecurityProdConfig {
                     .permitAll());
     http.formLogin(withDefaults());
     // http.formLogin(AbstractHttpConfigurer::disable)
-    http.httpBasic(withDefaults());
+    http.httpBasic(
+        httpSecurityHttpBasicConfigurer ->
+            httpSecurityHttpBasicConfigurer.authenticationEntryPoint(
+                new CustomBasicAuthenticationEntryPoint()));
     http.csrf(httpSecurityCsrfConfigurer -> httpSecurityCsrfConfigurer.disable());
     return http.build();
   }
