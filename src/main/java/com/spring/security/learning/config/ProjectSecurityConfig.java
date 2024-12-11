@@ -28,12 +28,15 @@ public class ProjectSecurityConfig {
                     .requestMatchers("/contact", "/notices", "/error", "/register")
                     .permitAll());
     http.formLogin(withDefaults());
-    // http.formLogin(AbstractHttpConfigurer::disable)
     http.httpBasic(
             httpSecurityHttpBasicConfigurer ->
                     httpSecurityHttpBasicConfigurer.authenticationEntryPoint(
                             new CustomBasicAuthenticationEntryPoint()));
     http.csrf(httpSecurityCsrfConfigurer -> httpSecurityCsrfConfigurer.disable());
+    http.exceptionHandling(
+        exceptionHandlingConfigurer ->
+            exceptionHandlingConfigurer.authenticationEntryPoint(
+                new CustomBasicAuthenticationEntryPoint()));
     return http.build();
   }
 
