@@ -10,3 +10,6 @@ public class Application {
     SpringApplication.run(Application.class, args);
   }
 }
+
+// set the property while running: SPRING_PROFILES_ACTIVE=default
+//else prod will be set
