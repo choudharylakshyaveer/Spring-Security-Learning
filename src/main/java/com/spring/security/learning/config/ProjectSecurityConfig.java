@@ -2,6 +2,7 @@ package com.spring.security.learning.config;
 
 import static org.springframework.security.config.Customizer.withDefaults;
 
+import com.spring.security.learning.exceptionhandling.CustomAccessDeniedHandler;
 import com.spring.security.learning.exceptionhandling.CustomBasicAuthenticationEntryPoint;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -29,14 +30,15 @@ public class ProjectSecurityConfig {
                     .permitAll());
     http.formLogin(withDefaults());
     http.httpBasic(
-            httpSecurityHttpBasicConfigurer ->
-                    httpSecurityHttpBasicConfigurer.authenticationEntryPoint(
-                            new CustomBasicAuthenticationEntryPoint()));
+        httpSecurityHttpBasicConfigurer ->
+            httpSecurityHttpBasicConfigurer.authenticationEntryPoint(
+                new CustomBasicAuthenticationEntryPoint()));
     http.csrf(httpSecurityCsrfConfigurer -> httpSecurityCsrfConfigurer.disable());
     http.exceptionHandling(
         exceptionHandlingConfigurer ->
-            exceptionHandlingConfigurer.authenticationEntryPoint(
-                new CustomBasicAuthenticationEntryPoint()));
+            exceptionHandlingConfigurer
+                //.authenticationEntryPoint(new CustomBasicAuthenticationEntryPoint())
+                .accessDeniedHandler(new CustomAccessDeniedHandler()));
     return http.build();
   }
 
