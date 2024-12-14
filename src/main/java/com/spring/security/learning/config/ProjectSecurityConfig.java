@@ -20,11 +20,16 @@ public class ProjectSecurityConfig {
 
   @Bean
   SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
-    http.sessionManagement(smc -> smc
-                            .sessionFixation(sessionFixationConfigurer -> sessionFixationConfigurer.changeSessionId()) //by default changeSessionId strategy it is used, so if we are not setting it then its not a problem at all.
-                            .invalidSessionUrl("/invalidSession")
-                    .maximumSessions(3).maxSessionsPreventsLogin(true)
-                    //.expiredUrl("/expiredUrl")
+    http.sessionManagement(
+            smc ->
+                smc.sessionFixation(
+                        sessionFixationConfigurer ->
+                            sessionFixationConfigurer
+                                .changeSessionId()) // by default changeSessionId strategy it is used, so if we are not setting it then its not a problem at all.
+                    .invalidSessionUrl("/invalidSession")
+                    .maximumSessions(3)
+                    .maxSessionsPreventsLogin(true)
+            // .expiredUrl("/expiredUrl")
             )
         .requiresChannel(rcc -> rcc.anyRequest().requiresInsecure()) // only http
         .authorizeHttpRequests(
@@ -32,7 +37,8 @@ public class ProjectSecurityConfig {
                 requests
                     .requestMatchers("/myAccount", "/myLoans", "/myCards", "/myBalance")
                     .authenticated()
-                    .requestMatchers("/contact", "/notices", "/error", "/register", "/invalidSession")
+                    .requestMatchers(
+                        "/contact", "/notices", "/error", "/register", "/invalidSession")
                     .permitAll());
     http.formLogin(withDefaults());
     http.httpBasic(

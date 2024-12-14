@@ -25,10 +25,12 @@ public class EazyBankUsernamePasswordAuthenticationProvider implements Authentic
     String username = authentication.getName();
     String password = authentication.getCredentials().toString();
     UserDetails userDetails = userDetailsService.loadUserByUsername(username);
-
+    if (passwordEncoder.matches(password, userDetails.getPassword())) {
       return new UsernamePasswordAuthenticationToken(
           userDetails, password, userDetails.getAuthorities());
-
+    } else {
+      throw new BadCredentialsException("Invalid password ");
+    }
   }
 
   @Override
