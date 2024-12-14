@@ -25,7 +25,9 @@ public class ProjectSecurityConfig {
                 smc.sessionFixation(
                         sessionFixationConfigurer ->
                             sessionFixationConfigurer
-                                .changeSessionId()) // by default changeSessionId strategy it is used, so if we are not setting it then its not a problem at all.
+                                .changeSessionId()) // by default changeSessionId strategy it is
+                                                    // used, so if we are not setting it then its
+                                                    // not a problem at all.
                     .invalidSessionUrl("/invalidSession")
                     .maximumSessions(3)
                     .maxSessionsPreventsLogin(true)
