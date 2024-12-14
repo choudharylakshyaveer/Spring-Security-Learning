@@ -20,7 +20,9 @@ public class ProjectSecurityConfig {
 
   @Bean
   SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
-    http.sessionManagement(smc -> smc.invalidSessionUrl("/invalidSession")
+    http.sessionManagement(smc -> smc
+                            .sessionFixation(sessionFixationConfigurer -> sessionFixationConfigurer.changeSessionId()) //by default changeSessionId strategy it is used, so if we are not setting it then its not a problem at all.
+                            .invalidSessionUrl("/invalidSession")
                     .maximumSessions(3).maxSessionsPreventsLogin(true)
                     //.expiredUrl("/expiredUrl")
             )
