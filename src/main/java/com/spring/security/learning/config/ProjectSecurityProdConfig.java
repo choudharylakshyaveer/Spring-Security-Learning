@@ -20,8 +20,11 @@ public class ProjectSecurityProdConfig {
 
   @Bean
   SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
-    http.sessionManagement(smc -> smc.invalidSessionUrl("/invalidSession")
-                    .maximumSessions(1).maxSessionsPreventsLogin(true))
+    http.sessionManagement(
+            smc ->
+                smc.invalidSessionUrl("/invalidSession")
+                    .maximumSessions(1)
+                    .maxSessionsPreventsLogin(true))
         .requiresChannel(rcc -> rcc.anyRequest().requiresSecure()) // Only HTTPS
         .authorizeHttpRequests(
             (requests) ->
@@ -43,7 +46,7 @@ public class ProjectSecurityProdConfig {
             exceptionHandlingConfigurer
                 .authenticationEntryPoint(
                     new CustomBasicAuthenticationEntryPoint()) // this wil disable the form login in
-                                                               // UI flow
+                // UI flow
                 .accessDeniedHandler(new CustomAccessDeniedHandler()));
 
     return http.build();
