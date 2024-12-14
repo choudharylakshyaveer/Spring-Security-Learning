@@ -20,27 +20,32 @@ public class ProjectSecurityProdConfig {
 
   @Bean
   SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
-    http.requiresChannel(rcc -> rcc.anyRequest().requiresSecure()) // Only HTTPS
+    http.sessionManagement(smc -> smc.invalidSessionUrl("/invalidSession")
+                    .maximumSessions(1).maxSessionsPreventsLogin(true))
+        .requiresChannel(rcc -> rcc.anyRequest().requiresSecure()) // Only HTTPS
         .authorizeHttpRequests(
             (requests) ->
                 requests
                     .requestMatchers("/myAccount", "/myLoans", "/myCards", "/myBalance")
                     .authenticated()
-                    .requestMatchers("/contact", "/notices", "/error", "/register")
+                    .requestMatchers(
+                        "/contact", "/notices", "/error", "/register", "/invalidSession")
                     .permitAll());
     http.formLogin(withDefaults());
     // http.formLogin(AbstractHttpConfigurer::disable)
     http.httpBasic(
         httpSecurityHttpBasicConfigurer ->
-            httpSecurityHttpBasicConfigurer
-                    .authenticationEntryPoint(new CustomBasicAuthenticationEntryPoint())
-    );
+            httpSecurityHttpBasicConfigurer.authenticationEntryPoint(
+                new CustomBasicAuthenticationEntryPoint()));
     http.csrf(httpSecurityCsrfConfigurer -> httpSecurityCsrfConfigurer.disable());
     http.exceptionHandling(
-            exceptionHandlingConfigurer ->
-                    exceptionHandlingConfigurer
-                            .authenticationEntryPoint(new CustomBasicAuthenticationEntryPoint())
-                            .accessDeniedHandler(new CustomAccessDeniedHandler()));
+        exceptionHandlingConfigurer ->
+            exceptionHandlingConfigurer
+                .authenticationEntryPoint(
+                    new CustomBasicAuthenticationEntryPoint()) // this wil disable the form login in
+                                                               // UI flow
+                .accessDeniedHandler(new CustomAccessDeniedHandler()));
+
     return http.build();
   }
 
