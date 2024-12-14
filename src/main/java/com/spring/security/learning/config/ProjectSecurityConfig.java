@@ -20,13 +20,17 @@ public class ProjectSecurityConfig {
 
   @Bean
   SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
-    http.requiresChannel(rcc -> rcc.anyRequest().requiresInsecure()) // only http
+    http.sessionManagement(smc -> smc.invalidSessionUrl("/invalidSession")
+                    .maximumSessions(3).maxSessionsPreventsLogin(true)
+                    //.expiredUrl("/expiredUrl")
+            )
+        .requiresChannel(rcc -> rcc.anyRequest().requiresInsecure()) // only http
         .authorizeHttpRequests(
             (requests) ->
                 requests
                     .requestMatchers("/myAccount", "/myLoans", "/myCards", "/myBalance")
                     .authenticated()
-                    .requestMatchers("/contact", "/notices", "/error", "/register")
+                    .requestMatchers("/contact", "/notices", "/error", "/register", "/invalidSession")
                     .permitAll());
     http.formLogin(withDefaults());
     http.httpBasic(
@@ -37,7 +41,9 @@ public class ProjectSecurityConfig {
     http.exceptionHandling(
         exceptionHandlingConfigurer ->
             exceptionHandlingConfigurer
-                //.authenticationEntryPoint(new CustomBasicAuthenticationEntryPoint())
+                // .authenticationEntryPoint(new CustomBasicAuthenticationEntryPoint()) //this wil
+                // disable the form login in UI flow
+
                 .accessDeniedHandler(new CustomAccessDeniedHandler()));
     return http.build();
   }
