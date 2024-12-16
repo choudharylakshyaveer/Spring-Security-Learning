@@ -20,13 +20,27 @@ public class ProjectSecurityConfig {
 
   @Bean
   SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
-    http.requiresChannel(rcc -> rcc.anyRequest().requiresInsecure()) // only http
+    http.sessionManagement(
+            smc ->
+                smc.sessionFixation(
+                        sessionFixationConfigurer ->
+                            sessionFixationConfigurer
+                                .changeSessionId()) // by default changeSessionId strategy it is
+                                                    // used, so if we are not setting it then its
+                                                    // not a problem at all.
+                    .invalidSessionUrl("/invalidSession")
+                    .maximumSessions(3)
+                    .maxSessionsPreventsLogin(true)
+            // .expiredUrl("/expiredUrl")
+            )
+        .requiresChannel(rcc -> rcc.anyRequest().requiresInsecure()) // only http
         .authorizeHttpRequests(
             (requests) ->
                 requests
                     .requestMatchers("/myAccount", "/myLoans", "/myCards", "/myBalance")
                     .authenticated()
-                    .requestMatchers("/contact", "/notices", "/error", "/register")
+                    .requestMatchers(
+                        "/contact", "/notices", "/error", "/register", "/invalidSession")
                     .permitAll());
     http.formLogin(withDefaults());
     http.httpBasic(
@@ -37,9 +51,10 @@ public class ProjectSecurityConfig {
     http.exceptionHandling(
         exceptionHandlingConfigurer ->
             exceptionHandlingConfigurer
-                .authenticationEntryPoint(new CustomBasicAuthenticationEntryPoint())
-                .accessDeniedHandler(new CustomAccessDeniedHandler()));
+                // .authenticationEntryPoint(new CustomBasicAuthenticationEntryPoint()) //this wil
+                // disable the form login in UI flow
 
+                .accessDeniedHandler(new CustomAccessDeniedHandler()));
     return http.build();
   }
 

@@ -37,3 +37,7 @@ logging:
   level:
     spring:
       security: ${SPRING_SECURITY_LOGGING_LEVEL:TRACE}
+server:
+  servlet:
+    session:
+      timeout: ${SESSION_TIMEOUT:120s}

@@ -34,3 +34,8 @@ logging:
   level:
     spring:
       security: ${SPRING_SECURITY_LOGGING_LEVEL:ERROR}
+
+server:
+  servlet:
+    session:
+      timeout: ${SESSION_TIMEOUT:120s}
